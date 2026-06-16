@@ -28,7 +28,7 @@ def main(page: ft.Page):
     blog_page     = BlogPage()
     github_page   = GithubPage()
 
-    # ── Fade wrapper ──────────────────────────────────────────────────────────
+    # ── Fade wrapper ────────────────────────────────────────────────────────
     fade_wrapper = ft.Container(
         expand=True,
         opacity=1,
@@ -40,7 +40,7 @@ def main(page: ft.Page):
     current_index = {"v": 0}
     nav_buttons: list[ft.Container] = []
     nav_labels = ["Home", "Timeline", "MATLAB", "Blog", "GitHub"]
-    nav_icons  = [ft.Icons.HOME, ft.Icons.TODAY, ft.Icons.GRADE, ft.Icons.ARTICLE, ft.Icons.FOLDER]
+    nav_icons  = [ft.icons.home, ft.icons.today, ft.icons.grade, ft.icons.article, ft.icons.folder]
 
     def rebuild_nav():
         for i, btn in enumerate(nav_buttons):
@@ -109,14 +109,14 @@ def main(page: ft.Page):
         )
         nav_buttons.append(btn)
 
-    # ── Top navbar ────────────────────────────────────────────────────────────
+    # ── Top navbar ──────────────────────────────────────────────────────────
     topbar = ft.Container(
         content=ft.Row(
             controls=[
                 ft.Row(
                     controls=[
                         ft.Container(
-                            content=ft.Icon(ft.Icons.APPS, color=ACCENT, size=20),
+                            content=ft.Icon(ft.icons.apps, color=ACCENT, size=20),
                             bgcolor="#1F2937",
                             border_radius=8,
                             padding=6,
