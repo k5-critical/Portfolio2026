@@ -109,7 +109,7 @@ def main(page: ft.Page):
         )
         nav_buttons.append(btn)
 
-    # ── Top navbar ──────────────────────────────────────────────────────────
+    # ── Top navbar ─────────────────────────────────────────────────────────[...]
     topbar = ft.Container(
         content=ft.Row(
             controls=[
