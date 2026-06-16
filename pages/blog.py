@@ -240,103 +240,41 @@ Understanding how loads transfer through a structure:
             return url.split("youtu.be/")[1].split("?")[0]
         return None
 
-    def _open_video_player_modal(self, video_url, post_title):
-        """Create a modal video player"""
+    def _build_embedded_video_section(self, video_url, thumb_url, post_title=""):
+        """Build an embedded video player container"""
         video_id = self._extract_video_id(video_url)
-        embed_url = f"https://www.youtube-nocookie.com/embed/{video_id}?autoplay=1" if video_id else video_url
         
-        # Create an HTML5 embed code
-        html_content = f"""
-        <!DOCTYPE html>
-        <html>
-        <head>
-            <meta charset="utf-8">
-            <meta name="viewport" content="width=device-width, initial-scale=1.0">
-            <style>
-                body {{ margin: 0; padding: 0; background: #0D1117; }}
-                .video-container {{
-                    position: relative;
-                    width: 100%;
-                    height: 100vh;
-                    display: flex;
-                    align-items: center;
-                    justify-content: center;
-                }}
-                iframe {{
-                    width: 100%;
-                    height: 100%;
-                    border: none;
-                }}
-            </style>
-        </head>
-        <body>
-            <div class="video-container">
-                <iframe 
-                    src="{embed_url}"
-                    allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                    allowfullscreen>
-                </iframe>
-            </div>
-        </body>
-        </html>
-        """
-        return html_content
-
-    def _open_video_url(self, video_url, post_title="Video"):
-        async def _handler(e):
-            try:
-                # Try to open in default browser first
-                await e.page.launch_url(video_url)
-            except:
-                # Fallback to YouTube if direct open fails
-                await e.page.launch_url(f"https://www.youtube.com/results?search_query={post_title}")
-        return _handler
-
-    def _build_video_section(self, video_url, thumb_url, post_title=""):
-        video_id = self._extract_video_id(video_url)
+        # Create embedded iframe URL
+        if video_id:
+            embed_url = f"https://www.youtube-nocookie.com/embed/{video_id}"
+        else:
+            embed_url = video_url
         
         return ft.Container(
             content=ft.Column(controls=[
                 ft.Text("📹 Video Reference", size=13, weight=ft.FontWeight.W_600, color=TEXT_PRI),
                 ft.Container(
-                    content=ft.Column(controls=[
-                        ft.Container(
-                            content=ft.Stack(controls=[
-                                ft.Image(src=thumb_url, fit=ft.BoxFit.COVER, width=float("inf"), height=220,
-                                         error_content=ft.Container(
-                                             content=ft.Column(controls=[
-                                                 ft.Icon(ft.Icons.PLAY_CIRCLE_FILLED, color=ACCENT, size=64),
-                                                 ft.Text("Click to Play", color=TEXT_SEC, size=14),
-                                             ], horizontal_alignment=ft.CrossAxisAlignment.CENTER, 
-                                                alignment=ft.MainAxisAlignment.CENTER),
-                                             alignment=ft.Alignment(0, 0),
-                                             bgcolor=SURFACE2,
-                                         )),
-                                ft.Container(
-                                    content=ft.Icon(ft.Icons.PLAY_CIRCLE_FILLED, color="#FFFFFF", size=64),
-                                    alignment=ft.Alignment(0, 0),
-                                    bgcolor="#00000066",
-                                    expand=True,
-                                ),
-                            ]),
-                            border_radius=8,
-                            clip_behavior=ft.ClipBehavior.HARD_EDGE,
-                            height=220,
-                            on_click=self._open_video_url(video_url, post_title),
-                            ink=True,
-                            expand=True,
-                        ),
-                        ft.Row(controls=[
-                            ft.Icon(ft.Icons.INFO, size=14, color=ACCENT),
-                            ft.Text("Click thumbnail to play video", size=11, color=TEXT_SEC),
-                        ], spacing=6),
-                    ], spacing=6, expand=True),
-                    bgcolor=SURFACE2, border_radius=8,
-                    padding=ft.Padding(left=12, right=12, top=12, bottom=12),
+                    content=ft.Html(
+                        content=f'''
+                        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                            <iframe 
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;"
+                                src="{embed_url}"
+                                allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                                allowfullscreen>
+                            </iframe>
+                        </div>
+                        ''',
+                        expand=True,
+                    ),
+                    height=320,
+                    border_radius=8,
+                    clip_behavior=ft.ClipBehavior.HARD_EDGE,
                     expand=True,
                 ),
             ], spacing=8),
-            bgcolor=SURFACE2, border_radius=8,
+            bgcolor=SURFACE2, 
+            border_radius=8,
             padding=ft.Padding(left=12, right=12, top=12, bottom=12),
             margin=ft.Margin(left=0, right=0, top=8, bottom=0),
             border=ft.Border.all(1, BORDER),
@@ -352,37 +290,10 @@ Understanding how loads transfer through a structure:
             visible=False,
         )
         
-        # Add video section with thumbnail
+        # Add embedded video section
         if post.get("video_url") and post.get("video_thumb"):
             content_col.controls.append(
-                self._build_video_section(post["video_url"], post["video_thumb"], post.get("title", ""))
-            )
-        
-        # Add video reference link if available
-        if post.get("video_url"):
-            content_col.controls.append(
-                ft.Container(
-                    content=ft.Column(controls=[
-                        ft.Text("📹 Video Link", size=13, weight=ft.FontWeight.W_600, color=TEXT_PRI),
-                        ft.Row(controls=[
-                            ft.Icon(ft.Icons.LINK, size=14, color=BLUE),
-                            ft.Text("Open in new window:", size=12, color=TEXT_SEC),
-                        ], spacing=6),
-                        ft.TextButton(
-                            post["video_url"],
-                            url=post["video_url"],
-                            style=ft.ButtonStyle(
-                                color=BLUE,
-                                padding=ft.Padding(left=0, right=0, top=0, bottom=0),
-                            ),
-                        ),
-                        ft.Text("Copy or click the link to open the video", size=10, color=TEXT_SEC, italic=True),
-                    ], spacing=4),
-                    bgcolor=SURFACE2, border_radius=8,
-                    padding=ft.Padding(left=12, right=12, top=12, bottom=12),
-                    margin=ft.Margin(left=0, right=0, top=8, bottom=0),
-                    border=ft.Border.all(1, BORDER),
-                )
+                self._build_embedded_video_section(post["video_url"], post["video_thumb"], post.get("title", ""))
             )
 
         btn_text   = ft.Text("Read more ▾", color=ACCENT, size=13)
