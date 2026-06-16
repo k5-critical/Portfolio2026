@@ -25,9 +25,9 @@ def _hoverable(container: ft.Container, accent_color: str) -> ft.Container:
     def on_hover(e, c=container, col=accent_color):
         if e.data == "true":
             c.bgcolor = SURFACE2
-            c.border  = ft.Border.all(1, col)
-            c.shadow  = ft.BoxShadow(spread_radius=0, blur_radius=18,
-                                     color=col + "33", offset=ft.Offset(0, 4))
+            c.border  = ft.Border.all(2, col)
+            c.shadow  = ft.BoxShadow(spread_radius=2, blur_radius=24,
+                                     color=col + "44", offset=ft.Offset(0, 8))
         else:
             c.bgcolor = SURFACE
             c.border  = ft.Border.all(1, BORDER)
@@ -210,24 +210,24 @@ Understanding how loads transfer through a structure:
 
     def _tag_chip(self, label):
         return ft.Container(
-            content=ft.Text(label, size=11, color=BLUE),
+            content=ft.Text(label, size=13, color=BLUE, weight=ft.FontWeight.W_500),
             bgcolor=BLUE + "22",
-            padding=ft.Padding(left=10, right=10, top=4, bottom=4),
-            border_radius=20,
-            border=ft.Border.all(1, BLUE + "44"),
+            padding=ft.Padding(left=12, right=12, top=6, bottom=6),
+            border_radius=24,
+            border=ft.Border.all(1.5, BLUE + "66"),
         )
 
     def _filter_chip(self, label, on_click):
         is_all = label == "All"
         active = (is_all and self._active_tag is None) or (label == self._active_tag)
         return ft.Container(
-            content=ft.Text(label, size=12,
+            content=ft.Text(label, size=13,
                             color=BG if active else TEXT_SEC,
-                            weight=ft.FontWeight.W_600 if active else ft.FontWeight.W_400),
+                            weight=ft.FontWeight.W_600 if active else ft.FontWeight.W_500),
             bgcolor=ACCENT if active else SURFACE,
-            padding=ft.Padding(left=14, right=14, top=6, bottom=6),
-            border_radius=20,
-            border=ft.Border.all(1, ACCENT if active else BORDER),
+            padding=ft.Padding(left=16, right=16, top=8, bottom=8),
+            border_radius=24,
+            border=ft.Border.all(1.5, ACCENT if active else BORDER),
             on_click=on_click,
             ink=True,
         )
@@ -252,13 +252,13 @@ Understanding how loads transfer through a structure:
         
         return ft.Container(
             content=ft.Column(controls=[
-                ft.Text("📹 Video Reference", size=13, weight=ft.FontWeight.W_600, color=TEXT_PRI),
+                ft.Text("📹 Video Reference", size=16, weight=ft.FontWeight.W_700, color=TEXT_PRI),
                 ft.Container(
                     content=ft.Html(
                         content=f'''
-                        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden;">
+                        <div style="position: relative; width: 100%; padding-bottom: 56.25%; height: 0; overflow: hidden; border-radius: 12px;">
                             <iframe 
-                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 8px;"
+                                style="position: absolute; top: 0; left: 0; width: 100%; height: 100%; border: none; border-radius: 12px;"
                                 src="{embed_url}"
                                 allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
                                 allowfullscreen>
@@ -267,17 +267,17 @@ Understanding how loads transfer through a structure:
                         ''',
                         expand=True,
                     ),
-                    height=320,
-                    border_radius=8,
+                    height=400,
+                    border_radius=12,
                     clip_behavior=ft.ClipBehavior.HARD_EDGE,
                     expand=True,
                 ),
-            ], spacing=8),
+            ], spacing=12),
             bgcolor=SURFACE2, 
-            border_radius=8,
-            padding=ft.Padding(left=12, right=12, top=12, bottom=12),
-            margin=ft.Margin(left=0, right=0, top=8, bottom=0),
-            border=ft.Border.all(1, BORDER),
+            border_radius=12,
+            padding=ft.Padding(left=16, right=16, top=16, bottom=16),
+            margin=ft.Margin(left=0, right=0, top=12, bottom=0),
+            border=ft.Border.all(2, BORDER),
             expand=True,
         )
 
@@ -296,7 +296,7 @@ Understanding how loads transfer through a structure:
                 self._build_embedded_video_section(post["video_url"], post["video_thumb"], post.get("title", ""))
             )
 
-        btn_text   = ft.Text("Read more ▾", color=ACCENT, size=13)
+        btn_text   = ft.Text("Read more ▾", color=ACCENT, size=14, weight=ft.FontWeight.W_600)
         expand_btn = ft.TextButton(content=btn_text)
 
         def toggle_expand(e, cc=content_col, bt=btn_text):
@@ -310,23 +310,23 @@ Understanding how loads transfer through a structure:
             ft.Container(
                 content=ft.Column(controls=[
                     ft.Row(controls=[
-                        ft.Text(post["title"], size=15, weight=ft.FontWeight.W_700,
+                        ft.Text(post["title"], size=18, weight=ft.FontWeight.W_800,
                                 color=TEXT_PRI, expand=True),
-                        ft.Text(post["date"], size=12, color=TEXT_SEC),
+                        ft.Text(post["date"], size=13, color=TEXT_SEC, weight=ft.FontWeight.W_500),
                     ]),
                     ft.Row(controls=[
-                        ft.Icon(ft.Icons.ACCESS_TIME, size=13, color=TEXT_SEC),
-                        ft.Text(read_time, size=12, color=TEXT_SEC),
-                    ], spacing=4),
-                    ft.Text(post["summary"], size=13, color=TEXT_SEC),
-                    ft.Row(controls=[self._tag_chip(t) for t in post["tags"]], spacing=6, wrap=True),
+                        ft.Icon(ft.Icons.ACCESS_TIME, size=15, color=TEXT_SEC),
+                        ft.Text(read_time, size=13, color=TEXT_SEC, weight=ft.FontWeight.W_500),
+                    ], spacing=5),
+                    ft.Text(post["summary"], size=15, color=TEXT_SEC, height=1.4),
+                    ft.Row(controls=[self._tag_chip(t) for t in post["tags"]], spacing=8, wrap=True),
                     content_col,
                     expand_btn,
-                ], spacing=8),
-                bgcolor=SURFACE, border_radius=12,
-                padding=ft.Padding(left=16, right=16, top=16, bottom=16),
-                border=ft.Border.all(1, BORDER),
-                margin=ft.Margin(left=0, right=0, top=0, bottom=12),
+                ], spacing=12),
+                bgcolor=SURFACE, border_radius=16,
+                padding=ft.Padding(left=20, right=20, top=20, bottom=20),
+                border=ft.Border.all(2, BORDER),
+                margin=ft.Margin(left=0, right=0, top=0, bottom=16),
             ),
             BLUE,
         )
@@ -349,7 +349,7 @@ Understanding how loads transfer through a structure:
 
         filter_row = ft.Row(
             controls=[self._filter_chip(l, make_handler(l)) for l in all_labels],
-            spacing=8, wrap=True,
+            spacing=10, wrap=True,
         )
         return filter_row
 
@@ -358,32 +358,32 @@ Understanding how loads transfer through a structure:
             ft.Container(
                 content=ft.Column(controls=[
                     ft.Row(controls=[
-                        ft.Icon(ft.Icons.ARTICLE, color=TEXT_PRI, size=28),
-                        ft.Text("Technical Blog", size=24, weight=ft.FontWeight.W_700, color=TEXT_PRI),
-                    ], spacing=10),
+                        ft.Icon(ft.Icons.ARTICLE, color=TEXT_PRI, size=36),
+                        ft.Text("Technical Blog", size=32, weight=ft.FontWeight.W_800, color=TEXT_PRI),
+                    ], spacing=12),
                     ft.Text("Confidence in Concepts — written explanations of core programming and engineering topics.",
-                            size=13, color=TEXT_SEC),
+                            size=16, color=TEXT_SEC, height=1.5),
                     ft.Row(controls=[
                         ft.Container(
-                            content=ft.Text(f"{len(self.POSTS)} Posts", size=12, color=ACCENT),
+                            content=ft.Text(f"{len(self.POSTS)} Posts", size=14, color=ACCENT, weight=ft.FontWeight.W_700),
                             bgcolor=ACCENT_B + "33",
-                            padding=ft.Padding(left=12, right=12, top=4, bottom=4),
-                            border_radius=20,
-                            border=ft.Border.all(1, ACCENT_B),
+                            padding=ft.Padding(left=14, right=14, top=6, bottom=6),
+                            border_radius=24,
+                            border=ft.Border.all(2, ACCENT_B),
                         ),
                         ft.Container(
-                            content=ft.Text(f"{len(self.ALL_TAGS)} Topics", size=12, color=BLUE),
+                            content=ft.Text(f"{len(self.ALL_TAGS)} Topics", size=14, color=BLUE, weight=ft.FontWeight.W_700),
                             bgcolor=BLUE + "22",
-                            padding=ft.Padding(left=12, right=12, top=4, bottom=4),
-                            border_radius=20,
-                            border=ft.Border.all(1, BLUE + "44"),
+                            padding=ft.Padding(left=14, right=14, top=6, bottom=6),
+                            border_radius=24,
+                            border=ft.Border.all(2, BLUE + "66"),
                         ),
-                    ], spacing=8),
-                ], spacing=8),
-                bgcolor=SURFACE, border_radius=16,
-                padding=ft.Padding(left=24, right=24, top=24, bottom=24),
-                margin=ft.Margin(left=0, right=0, top=0, bottom=16),
-                border=ft.Border.all(1, BORDER),
+                    ], spacing=12),
+                ], spacing=12),
+                bgcolor=SURFACE, border_radius=20,
+                padding=ft.Padding(left=28, right=28, top=28, bottom=28),
+                margin=ft.Margin(left=0, right=0, top=0, bottom=20),
+                border=ft.Border.all(2, BORDER),
             ),
             ACCENT,
         )
@@ -391,12 +391,12 @@ Understanding how loads transfer through a structure:
         cards_col  = ft.Column(ref=self._cards_ref,
                                controls=[self._build_post_card(p) for p in self.POSTS],
                                spacing=0)
-        filter_row = self._make_filter_row(page) if page else ft.Row(spacing=8)
+        filter_row = self._make_filter_row(page) if page else ft.Row(spacing=10)
 
         return ft.Column(controls=[
             hero,
-            ft.Text("Filter by Topic", size=13, weight=ft.FontWeight.W_600, color=TEXT_SEC),
+            ft.Text("Filter by Topic", size=16, weight=ft.FontWeight.W_700, color=TEXT_SEC),
             filter_row,
-            ft.Divider(height=16, color="transparent"),
+            ft.Divider(height=20, color="transparent"),
             cards_col,
-        ], spacing=8, scroll=ft.ScrollMode.AUTO)
+        ], spacing=12, scroll=ft.ScrollMode.AUTO)
