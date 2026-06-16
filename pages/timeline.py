@@ -42,37 +42,37 @@ class TimelinePage:
             "week": "Week 1", "dates": "20 Jan – 26 Jan",
             "task": "Project setup & repo initialisation",
             "contribution": "Initialised the GitHub repository, set up branching strategy, and created the base Flet app structure shared with the team.",
-            "status": "Done", "icon": ft.Icons.ROCKET_LAUNCH, "tags": ["Git", "Setup"],
+            "status": "Done", "icon": ft.icons.rocket_launch, "tags": ["Git", "Setup"],
         },
         {
             "week": "Week 2", "dates": "27 Jan – 2 Feb",
             "task": "Civil engineering module — input form",
             "contribution": "Built the material input form for the Civil module using ft.TextField and ft.Dropdown. Added client-side validation.",
-            "status": "Done", "icon": ft.Icons.BUILD, "tags": ["Python", "UI"],
+            "status": "Done", "icon": ft.icons.build, "tags": ["Python", "UI"],
         },
         {
             "week": "Week 3", "dates": "3 Feb – 9 Feb",
             "task": "Cost calculation logic",
             "contribution": "Implemented the Total Cost formula (Σ Qᵢ × Pᵢ + Overheads) in Python and wired it to the UI. Wrote unit tests.",
-            "status": "Done", "icon": ft.Icons.CALCULATE, "tags": ["Python", "Maths"],
+            "status": "Done", "icon": ft.icons.calculate, "tags": ["Python", "Maths"],
         },
         {
             "week": "Week 4", "dates": "10 Feb – 16 Feb",
             "task": "Results display & data table",
             "contribution": "Created the ft.DataTable component showing itemised cost breakdown. Added CSV export functionality.",
-            "status": "Done", "icon": ft.Icons.TABLE_CHART, "tags": ["Python", "UI"],
+            "status": "Done", "icon": ft.icons.table_chart, "tags": ["Python", "UI"],
         },
         {
             "week": "Week 5", "dates": "17 Feb – 23 Feb",
             "task": "Code review & pull request",
             "contribution": "Reviewed 3 teammates' PRs, flagged a critical off-by-one error in the Mining module loop. Merged approved changes.",
-            "status": "Done", "icon": ft.Icons.RATE_REVIEW, "tags": ["Git", "Collaboration"],
+            "status": "Done", "icon": ft.icons.rate_review, "tags": ["Git", "Collaboration"],
         },
         {
             "week": "Week 6", "dates": "24 Feb – 2 Mar",
             "task": "Portfolio — this web app",
             "contribution": "Started building the individual Flet web portfolio. Completed Timeline and MATLAB hub pages.",
-            "status": "In Progress", "icon": ft.Icons.WEB, "tags": ["Python", "UI"],
+            "status": "In Progress", "icon": ft.icons.web, "tags": ["Python", "UI"],
         },
     ]
 
@@ -112,7 +112,7 @@ class TimelinePage:
             border=ft.Border.all(1, dot_color + "55"),
         )
 
-        status_icon = (ft.Icons.CHECK_CIRCLE if is_done else ft.Icons.PENDING if is_progress else ft.Icons.CIRCLE)
+        status_icon = (ft.icons.check_circle if is_done else ft.icons.pending if is_progress else ft.icons.circle)
         status_badge = ft.Container(
             content=ft.Row(controls=[
                 ft.Icon(status_icon, size=12, color=fg),
@@ -176,7 +176,7 @@ class TimelinePage:
                 content=ft.Column(
                     controls=[
                         ft.Row(controls=[
-                            ft.Icon(ft.Icons.TODAY, color=TEXT_PRI, size=28),
+                            ft.Icon(ft.icons.today, color=TEXT_PRI, size=28),
                             ft.Text("Project Timeline", size=24, weight=ft.FontWeight.W_700, color=TEXT_PRI),
                         ], spacing=10),
                         ft.Text("Weekly log of my individual contributions to the group project.", size=13, color=TEXT_SEC),
